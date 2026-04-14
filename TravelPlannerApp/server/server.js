@@ -88,7 +88,8 @@ const createTripsTable = (connection) => {
         id INT AUTO_INCREMENT PRIMARY KEY,
         title VARCHAR(200) NOT NULL,
         destination VARCHAR(200) NOT NULL,
-        travel_date DATE DEFAULT NULL,
+        start_date DATE DEFAULT NULL,
+        end_date DATE DEFAULT NULL,
         content TEXT NOT NULL,
         integrity_hash VARCHAR(64) NOT NULL,
         ai_recommendation TEXT DEFAULT NULL,
@@ -179,7 +180,7 @@ app.get("/", (req, res) => {
 
 // Trip 생성 (Task 2.3)
 app.post("/trips", checkDbConnection, async (req, res) => {
-  const { title, destination, travel_date, content } = req.body;
+  const { title, destination, start_date, end_date, content } = req.body;
 
   if (!title?.trim() || !destination?.trim() || !content?.trim()) {
     return res
@@ -190,11 +191,11 @@ app.post("/trips", checkDbConnection, async (req, res) => {
   const integrity_hash = generateHash(title, destination, content);
 
   const sql =
-    "INSERT INTO trips (title, destination, travel_date, content, integrity_hash) VALUES (?, ?, ?, ?, ?)";
+    "INSERT INTO trips (title, destination, start_date, end_date, content, integrity_hash) VALUES (?, ?, ?, ?, ?, ?)";
 
   dbConnection.query(
     sql,
-    [title, destination, travel_date || null, content, integrity_hash],
+    [title, destination, start_date || null, end_date || null, content, integrity_hash],
     (err, result) => {
       if (err) {
         console.error("여행 기록 저장 중 오류:", err);
