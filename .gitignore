@@ -5,6 +5,9 @@
 **/.DS_Store
 **/._.DS_Store
 
+# Kiro specs
+.kiro/
+
 # Python
 __pycache__/
 *.pyc
